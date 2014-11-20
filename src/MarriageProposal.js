@@ -1,5 +1,6 @@
 var Person = require("Person");
 
+
 function MarriageProposal(proposingPerson, proposedToPerson) {
   if (!(proposedToPerson instanceof Person)) {
     throw new Error("The argument 'proposingPerson' does not conform to expected contract");
