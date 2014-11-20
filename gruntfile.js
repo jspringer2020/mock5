@@ -7,12 +7,13 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['<%= jshint.files %>'],
-      tasks: ['build']
+      tasks: ['clear', 'build']
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-clear');
 
   grunt.registerTask('test', []);
   grunt.registerTask('lint', ['jshint']);
