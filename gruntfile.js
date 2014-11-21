@@ -77,14 +77,14 @@ module.exports = function (grunt) {
     })];
     
     outputColor = {
-      bg: bgData.substring(0, bgData.indexOf("|") - 1),
-      fg: bgData.substring(bgData.indexOf("|"))
+      bg: bgData.substring(0, bgData.indexOf("|")),
+      fg: bgData.substring(bgData.indexOf("|") + 1)
     };
 
     message = "Run #" + ("" + watchRuns) + " completed " +
       (Math.floor((now.getTime() - lastGruntWatchTime.getTime()) / 1000)) + "secs ago in " +
       time + "ms at " + now.toString();
-
+    
     grunt.log.writeln(message);
     grunt.log.writeln(('Waiting for more changes...' [outputColor.bg])[outputColor.fg]);
 
