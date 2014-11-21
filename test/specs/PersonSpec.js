@@ -3,8 +3,6 @@ describe("Person", function () {
   var baseDirectory = "./../../";
   var proxyquire = require("proxyquire");
   var chance = require("chance")();
-  //  var sinon = require("sinon");
-  //  var should = require("should");
 
   var mocks = {};
 
