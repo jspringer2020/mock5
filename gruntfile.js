@@ -107,8 +107,8 @@ module.exports = function (grunt) {
 
     function printOutput(lcov) {
       var functionsCovered, linesCovered;
-      functionsCovered = Math.round((lcov.functions.hit / lcov.functions.found), 4) * 100;
-      linesCovered = Math.round((lcov.lines.hit / lcov.lines.found), 4) * 100;
+      functionsCovered = Math.round((lcov.functions.hit / lcov.functions.found) * 10000) / 100;
+      linesCovered = Math.round((lcov.lines.hit / lcov.lines.found) * 10000) / 100;
 
       function getColor(percent) {
         var result = "green";
@@ -121,14 +121,17 @@ module.exports = function (grunt) {
         return result;
       }
 
-      grunt.log.writeln("There were " + lcov.functions.hit + " of " + lcov.functions.found +
-        " functions covered for " + (functionsCovered.toString()[getColor(functionsCovered)]).bold +
-        "% coverage" [getColor(linesCovered)]);
-      grunt.log.writeln("There were " + lcov.lines.hit + " of " + lcov.lines.found +
-        " lines covered for " + (linesCovered.toString()[getColor(linesCovered)]).bold +
-        "% coverage" [getColor(linesCovered)]);
-      grunt.log.writeln("");
-      grunt.log.writeln("");
+      grunt.log.writeln();
+      grunt.log.writeln("  " + (functionsCovered.toString()[getColor(functionsCovered)]).bold +
+                        "% coverage" [getColor(linesCovered)] +
+                        ": " + lcov.functions.hit + " of " + lcov.functions.found +
+                        " functions covered.");
+      grunt.log.writeln("  " + (linesCovered.toString()[getColor(linesCovered)]).bold +
+                        "% coverage" [getColor(linesCovered)] +
+                        ": " + lcov.lines.hit + " of " + lcov.lines.found +
+                        " lines covered.");
+      grunt.log.writeln();
+      grunt.log.writeln();
       done(); // or done(false); in case of error
     }
   });
