@@ -9,6 +9,10 @@
   "-W024": true,
   "browser": true,
   "globals": {
-    "module": true
+    "module": true,
+    "mocha": true,
+    "describe": true,
+    "it": true,
+    "beforeEach": true
   }
 }

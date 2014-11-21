@@ -10,7 +10,10 @@
     "grunt-clear": "~0.2.1",
     "mocha": "~2.0.1",
     "chance": "~0.6.1",
-    "sinon": "~1.12.1"
+    "sinon": "~1.12.1",
+    "proxyquire": "~1.1.0",
+    "should": "~4.3.0",
+    "grunt-mocha-cli": "~1.11.0"
   },
   "engine": "node >= 0.10.24"
 }
