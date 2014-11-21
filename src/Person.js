@@ -1,11 +1,19 @@
 
 
 function Person(gender, name) {
-  if (!(gender instanceof Boolean)) {
+  if (typeof gender !== "boolean") {
     throw new Error("The argument 'gender' does not conform to expected contract");
   }
   
-  this._gender = gender;
+  if (!name) {
+    throw new Error("The argument 'name' is required");
+  }
+  
+  if (typeof name !== "string") {
+    throw new Error("The argument 'name' does not conform to expected contract");
+  }
+  
+  this._gender = gender ? Gender.getMale() : Gender.getFemale();
   this._name = name;
 }
 
@@ -13,7 +21,7 @@ function Person(gender, name) {
 /**
  * Returns the gender of the person.
  *
- * @returns {Boolean} TRUE, for man; FALSE, for woman;
+ * @returns {Person.Gender} The gender of the person
  */
 Person.prototype.getGender = function getGender() {
   return this._gender;
@@ -44,6 +52,29 @@ Person.prototype.getMarriageProposalResponse = function getMarriageProposalRespo
 };
 
 
+var Gender = function(isMale) {
+  this._isMale = isMale === true;
+  this._displayName = this._isMale ? "Male" : "Female";
+};
+
+
+Gender.prototype.getIsMale = function getIsMale() {
+  return this._isMale;
+};
+
+
+Gender.prototype.getDisplayName = function getDisplayName() {
+  return this._displayName;
+};
+
+
+var genders = {
+  male: new Gender(true),
+  female: new Gender(false)
+};
+
+Gender.getMale = function getMale() { return genders.male; };
+Gender.getFemale = function getFemale() { return genders.female; };
 
 
 module.exports = Person;

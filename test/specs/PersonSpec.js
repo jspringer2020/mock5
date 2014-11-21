@@ -1,28 +1,115 @@
 describe("Person", function() {
-  //var proxyquire = require("proxyquire");
-  //var sinon = require("sinon");
-  //var should = require("should");
+  
+  var baseDirectory = "./../../";
+  var proxyquire = require("proxyquire");
+  var chance = require("chance")();
+//  var sinon = require("sinon");
+//  var should = require("should");
 
+  var mocks = {};
+  
+  function getModule() {
+    var mod = proxyquire(baseDirectory + "src/Person", mocks);
+    return mod;
+  }
   
   describe("when creating a new person", function() {
+    var Person;
     
-    describe("when the name is not supplied", function() {
-      
-      it("then an error is thrown");
+    beforeEach(function() {
+      Person = getModule();
+    });
+    
+    describe("when the name is not valid", function() {
+      var construction;
+
+      describe("when the name is not supplied", function() {
+        beforeEach(function() {
+          construction = function() {
+            return new Person(true);
+          };
+        });
+
+        it("then an error is thrown", function() {
+          construction.should.throwError();
+        });
+      });
+
+      describe("when the name is not a string", function() {
+        beforeEach(function() {
+          construction = function() {
+            return new Person(true, chance.integer());
+          };
+        });
+
+        it("then an error is thrown", function() {
+          construction.should.throwError();
+        });
+      });
     });
     
     describe("when the gender is not supplied", function() {
+      var construction;
+
+      beforeEach(function() {
+        construction = function() {
+          return new Person();
+        };
+      });
       
-      it("then an error is thrown");
+      it("then an error is thrown", function() {
+        construction.should.throwError();
+      });
     });
     
     describe("when all required parameters are passed", function() {
+      var result, name;
       
-      it("then the object is created");
-      
-      it("then the gender is set");
-      
-      it("then the name is set");
+      describe("when its a male", function() {
+        beforeEach(function() {
+          name = chance.string();
+          result = new Person(true, name);
+        });
+        
+        it("then the object is created", function() {
+          result.should.be.ok
+            .and.be.an.instanceOf(Person);
+        });
+
+        it("then the gender is MALE", function() {
+          result.getGender().should.have.properties({
+            _displayName: "Male",
+            _isMale: true
+          });
+        });
+
+        it("then the name is set", function() {
+          result.getName().should.equal(name);
+        });
+      });
+
+      describe("when its a female", function() {
+        beforeEach(function() {
+          name = chance.string();
+          result = new Person(false, name);
+        });
+        
+        it("then the object is created", function() {
+          result.should.be.ok
+            .and.be.an.instanceOf(Person);
+        });
+
+        it("then the gender is MALE", function() {
+          result.getGender().should.have.properties({
+            _displayName: "Female",
+            _isMale: false
+          });
+        });
+
+        it("then the name is set", function() {
+          result.getName().should.equal(name);
+        });
+      });
     });
   });
   
