@@ -1,0 +1,6 @@
+--require should
+--timeout 15000
+--reporter dot
+--ui bdd
+--check-leaks
+--recursive

@@ -13,7 +13,8 @@
     "sinon": "~1.12.1",
     "proxyquire": "~1.1.0",
     "should": "~4.3.0",
-    "grunt-mocha-cli": "~1.11.0"
+    "grunt-mocha-cli": "~1.11.0",
+    "istanbul": "~0.3.2"
   },
   "engine": "node >= 0.10.24"
 }

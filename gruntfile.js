@@ -7,14 +7,11 @@ module.exports = function(grunt) {
     },
     watch: {
       files: ['<%= jshint.files %>'],
+      reporter: 'Dot',
       tasks: ['clear', 'lint', 'test']
     },
     mochacli: {
       options: {
-        "check-leaks": true, /* Check for global variable leaks*/
-        require: ['should'],
-        reporter: 'spec',
-        bail: true
       },
       all: ['./test/specs/**/*Spec.js']
     }

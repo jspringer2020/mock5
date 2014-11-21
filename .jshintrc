@@ -7,8 +7,8 @@
   "node": true,
   "-W040": true,
   "-W024": true,
-  "browser": true,
   "globals": {
+    "browser": true,
     "module": true,
     "mocha": true,
     "describe": true,
