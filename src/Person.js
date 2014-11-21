@@ -44,11 +44,49 @@ Person.prototype.getName = function getName() {
  * integer between 0 and 100 which describes how likely the response to the proposal will be YES.
  * 
  * @param {Person} proposal The marriage proposal
- * @param {PersonalHistoryProvider} personalHistoryProvider The service provider used for retrieving all the history for two {Person}s.
+ * @param {(PersonalHistory|Array.)} personalHistory All the history for two {Person}s.
  * @result {Integer} A percent of how likely the person is to respond YES to the proposal.
  */
-Person.prototype.getMarriageProposalResponse = function getMarriageProposalResponse(/*otherPerson, personalHistoryProvider*/) {
-  return 0;
+Person.prototype.getMarriageProposalResponse = function getMarriageProposalResponse(otherPerson, personalHistory) {
+  if (!otherPerson) {
+    throw new Error("The argument 'otherPerson' is required");
+  }
+  
+  if (!(otherPerson instanceof Person)) {
+    throw new Error("The argument 'otherPerson' does not conform to expected contract");
+  }
+  
+  if (personalHistory && !(personalHistory instanceof Array)) {
+    throw new Error("The argument 'personalHistory' does not conform to expected contract");
+  }
+  
+  var history, 
+      x, 
+      result = 0,
+      calculatedEnjoyment = 0, 
+      eventCount = 0;
+  
+  if (personalHistory) {
+    for (x = 0; x < personalHistory.length; x++) {
+      history = personalHistory[x];
+      
+      if (history.wasIncludedInHistory(this)) {
+        eventCount++;
+        calculatedEnjoyment += history.getEnjoymentLevel();
+      }
+    }
+  }
+  
+  calculatedEnjoyment = Math.floor(calculatedEnjoyment / eventCount);
+  
+  if (calculatedEnjoyment > 100) {
+    result = 100;
+  }
+  else if (calculatedEnjoyment > 0) {
+    result = calculatedEnjoyment;
+  }
+
+  return result;
 };
 
 
