@@ -134,6 +134,29 @@ describe("Person", function () {
           _displayName: "Male"
         });
       });
+      
+      describe("when checking if its male", function() {
+        var isMale;
+        beforeEach(function() {
+          isMale = result.getIsMale();
+        });
+        
+        it("then its a male", function() {
+          isMale.should.be.ok
+            .and.an.instanceOf(Boolean);
+        });
+      });
+      
+      describe("when getting the display", function() {
+        var display;
+        beforeEach(function() {
+          display = result.getDisplayName();
+        });
+        
+        it("then its MALE", function() {
+          display.should.equal("Male");
+        });
+      });
     });
 
     describe("when the gender is FEMALE", function () {
@@ -148,6 +171,29 @@ describe("Person", function () {
         result.should.have.properties({
           _isMale: false,
           _displayName: "Female"
+        });
+      });
+
+      describe("when checking if its male", function() {
+        var isMale;
+        beforeEach(function() {
+          isMale = result.getIsMale();
+        });
+
+        it("then its a male", function() {
+          isMale.should.not.be.ok
+            .and.an.instanceOf(Boolean);
+        });
+      });
+
+      describe("when getting the display", function() {
+        var display;
+        beforeEach(function() {
+          display = result.getDisplayName();
+        });
+
+        it("then its Female", function() {
+          display.should.equal("Female");
         });
       });
     });
@@ -298,33 +344,61 @@ describe("Person", function () {
       });
 
       describe("when the history results in a 75 response", function () {
+        var result;
+        
+        beforeEach(function() {
+          personalHistories.push(createPersonalHistory(target, 100));
+          personalHistories.push(createPersonalHistory(target, 50));
+          personalHistories.push(createPersonalHistory(target, 75));
+          personalHistories.push(createPersonalHistory(target, 75));
+          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+        });
 
-        it("then the result is 75");
-
-        it("then the history service provider was searched");
+        it("then the result is 75", function() {
+          result.should.equal(75);
+        });
       });
 
       describe("when the history results in a 35 response", function () {
+        var result;
 
-        it("then the result is 35");
-
-        it("then the history service provider was searched");
+        beforeEach(function() {
+          personalHistories.push(createPersonalHistory(target, 50));
+          personalHistories.push(createPersonalHistory(target, 20));
+          personalHistories.push(createPersonalHistory(target, 35));
+          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+        });
+        
+        it("then the result is 35", function() {
+          result.should.equal(35);
+        });
       });
 
       describe("when the history results in a 0 response", function () {
-
-        describe("when all history is bad leading to a negative total", function () {
-
-          it("then the result is 0");
-
-          it("then the history service provider was searched");
+        var result;
+        beforeEach(function() {
+          var x, count = chance.integer({ min: 10, max: 50 });
+          for (x = 0; x < count; x++) {
+            personalHistories.push(createPersonalHistory(target, (10 + x)));
+            personalHistories.push(createPersonalHistory(target, -1 * (10 + x)));
+          }
+          
+          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
         });
 
-        describe("when history results in a 0 response", function () {
-
-          it("then the result is 0");
-
-          it("then the history service provider was searched");
+        it("then the result is 0", function() {
+          result.should.equal(0);
+        });
+        
+        describe("when all history is bad leading to a negative total", function () {
+          beforeEach(function() {
+            personalHistories.push(createPersonalHistory(target, -1500));
+            result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+          });
+          
+          it("then the result is 0", function() {
+            result.should.equal(0);
+          });
         });
       });
     });
