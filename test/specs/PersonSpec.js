@@ -217,7 +217,7 @@ describe("Person", function () {
     });
   });
 
-  describe("when determining the marriage proposal response", function () {
+  describe("when calculating personal compatibility", function () {
     var Person, target;
     
     beforeEach(function() {
@@ -227,17 +227,11 @@ describe("Person", function () {
     });
 
     describe("when invalid parameters are used", function() {
-      describe("when no other person is supplied", function () {
-        it("then an error is raised", function() {
-          target.getMarriageProposalResponse.should.throwError();
-        });
-      });
-
       describe("when the other person is not a Person", function () {
         var delegate;
         beforeEach(function() {
           delegate = function() {
-            return target.getMarriageProposalResponse({});
+            return target.calculatePersonalCompatibility({});
           };
         });
 
@@ -250,7 +244,7 @@ describe("Person", function () {
         var delegate;
         beforeEach(function() {
           delegate = function() {
-            return target.getMarriageProposalResponse(new Person(true, chance.string()), {});
+            return target.calculatePersonalCompatibility(new Person(true, chance.string()), {});
           };
         });
 
@@ -261,10 +255,9 @@ describe("Person", function () {
     });
 
     describe("when the personal history is missing", function () {
-      var otherPerson, result;
+      var result;
       beforeEach(function() {
-        otherPerson = new Person(true, chance.string());
-        result = target.getMarriageProposalResponse(otherPerson);
+        result = target.calculatePersonalCompatibility();
       });
 
       it("then the result is 0", function() {
@@ -273,10 +266,9 @@ describe("Person", function () {
     });
 
     describe("when there is no personal history", function () {
-      var otherPerson, result;
+      var result;
       beforeEach(function() {
-        otherPerson = new Person(true, chance.string());
-        result = target.getMarriageProposalResponse(otherPerson, []);
+        result = target.calculatePersonalCompatibility([]);
       });
 
       it("then the result is 0", function() {
@@ -285,7 +277,7 @@ describe("Person", function () {
     });
 
     describe("when there is personal history", function () {
-      var personalHistories, otherPerson;
+      var personalHistories;
       
       function createPersonalHistory(person, enjoymentLevel) {
         return {
@@ -300,7 +292,6 @@ describe("Person", function () {
       
       beforeEach(function() {
         personalHistories = [];
-        otherPerson = new Person(true, chance.string());
       });
 
       describe("when the history results in a 100 response", function () {
@@ -313,7 +304,7 @@ describe("Person", function () {
             personalHistories.push(createPersonalHistory(target, 100));
           }
           
-          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+          result = target.calculatePersonalCompatibility(personalHistories);
         });
 
         it("then the result is 100", function() {
@@ -323,7 +314,7 @@ describe("Person", function () {
         describe("when an amazing event is added to the history", function() {
           beforeEach(function() {
             personalHistories.push(createPersonalHistory(target, 100 * 5));
-            result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+            result = target.calculatePersonalCompatibility(personalHistories);
           });
 
           it("then the result is 100", function() {
@@ -332,8 +323,8 @@ describe("Person", function () {
           
           describe("when a terrible event occurred without the person", function() {
             beforeEach(function() {
-              personalHistories.push(createPersonalHistory(otherPerson, 100 * -5));
-              result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+              personalHistories.push(createPersonalHistory({}, 100 * -5));
+              result = target.calculatePersonalCompatibility(personalHistories);
             });
 
             it("then the result is 100", function() {
@@ -351,7 +342,7 @@ describe("Person", function () {
           personalHistories.push(createPersonalHistory(target, 50));
           personalHistories.push(createPersonalHistory(target, 75));
           personalHistories.push(createPersonalHistory(target, 75));
-          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+          result = target.calculatePersonalCompatibility(personalHistories);
         });
 
         it("then the result is 75", function() {
@@ -366,7 +357,7 @@ describe("Person", function () {
           personalHistories.push(createPersonalHistory(target, 50));
           personalHistories.push(createPersonalHistory(target, 20));
           personalHistories.push(createPersonalHistory(target, 35));
-          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+          result = target.calculatePersonalCompatibility(personalHistories);
         });
         
         it("then the result is 35", function() {
@@ -383,7 +374,7 @@ describe("Person", function () {
             personalHistories.push(createPersonalHistory(target, -1 * (10 + x)));
           }
           
-          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+          result = target.calculatePersonalCompatibility(personalHistories);
         });
 
         it("then the result is 0", function() {
@@ -393,7 +384,7 @@ describe("Person", function () {
         describe("when all history is bad leading to a negative total", function () {
           beforeEach(function() {
             personalHistories.push(createPersonalHistory(target, -1500));
-            result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+            result = target.calculatePersonalCompatibility(personalHistories);
           });
           
           it("then the result is 0", function() {

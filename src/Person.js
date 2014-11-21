@@ -39,23 +39,14 @@ Person.prototype.getName = function getName() {
 
 
 /**
- * Taking in a {Person} it determines the likelihood of a YES response for marriage. This is a long running method 
- * because it examines of all the "history" between the two {Person}s. The result of this method is a positive 
- * integer between 0 and 100 which describes how likely the response to the proposal will be YES.
+ * By examining the personal history to see the enjoyment of activities the compatability can be
+ * calculated. The result of this method is a positive integer between 0 and 100 which describes how 
+ * compatible someone is with a set of events.
  * 
- * @param {Person} proposal The marriage proposal
  * @param {(PersonalHistory|Array.)} personalHistory All the history for two {Person}s.
- * @result {Integer} A percent of how likely the person is to respond YES to the proposal.
+ * @result {Integer} A percent of how compatible someone is with specific events.
  */
-Person.prototype.getMarriageProposalResponse = function getMarriageProposalResponse(otherPerson, personalHistory) {
-  if (!otherPerson) {
-    throw new Error("The argument 'otherPerson' is required");
-  }
-  
-  if (!(otherPerson instanceof Person)) {
-    throw new Error("The argument 'otherPerson' does not conform to expected contract");
-  }
-  
+Person.prototype.calculatePersonalCompatibility = function calculatePersonalCompatibility(personalHistory) {
   if (personalHistory && !(personalHistory instanceof Array)) {
     throw new Error("The argument 'personalHistory' does not conform to expected contract");
   }
