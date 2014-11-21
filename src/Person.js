@@ -36,9 +36,10 @@ Person.prototype.getName = function getName() {
  * integer between 0 and 100 which describes how likely the response to the proposal will be YES.
  * 
  * @param {Person} proposal The marriage proposal
+ * @param {PersonalHistoryProvider} personalHistoryProvider The service provider used for retrieving all the history for two {Person}s.
  * @result {Integer} A percent of how likely the person is to respond YES to the proposal.
  */
-Person.prototype.getMarriageProposalResponse = function getMarriageProposalResponse(/*otherPerson*/) {
+Person.prototype.getMarriageProposalResponse = function getMarriageProposalResponse(/*otherPerson, personalHistoryProvider*/) {
   return 0;
 };
 
