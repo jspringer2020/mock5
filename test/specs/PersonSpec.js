@@ -172,69 +172,159 @@ describe("Person", function () {
   });
 
   describe("when determining the marriage proposal response", function () {
-
-    describe("when no other person is supplied", function () {
-
-      it("then an error is raised");
+    var Person, target;
+    
+    beforeEach(function() {
+      Person = getModule();
+      
+      target = new Person(true, chance.string());
     });
 
-    describe("when no history service provider is supplied", function () {
+    describe("when invalid parameters are used", function() {
+      describe("when no other person is supplied", function () {
+        it("then an error is raised", function() {
+          target.getMarriageProposalResponse.should.throwError();
+        });
+      });
 
-      it("then an error is raised");
+      describe("when the other person is not a Person", function () {
+        var delegate;
+        beforeEach(function() {
+          delegate = function() {
+            return target.getMarriageProposalResponse({});
+          };
+        });
+
+        it("then an error is raised", function() {
+          delegate.should.throwError();
+        });
+      });
+      
+      describe("when the personal history is not an Array", function() {
+        var delegate;
+        beforeEach(function() {
+          delegate = function() {
+            return target.getMarriageProposalResponse(new Person(true, chance.string()), {});
+          };
+        });
+
+        it("then an error is raised", function() {
+          delegate.should.throwError();
+        });
+      });
     });
 
-    describe("when the marriage proposal isn't valid", function () {
+    describe("when the personal history is missing", function () {
+      var otherPerson, result;
+      beforeEach(function() {
+        otherPerson = new Person(true, chance.string());
+        result = target.getMarriageProposalResponse(otherPerson);
+      });
 
-      it("then an error is raised");
+      it("then the result is 0", function() {
+        result.should.equal(0);
+      });
     });
 
-    describe("when the marriage proposal is valid", function () {
+    describe("when there is no personal history", function () {
+      var otherPerson, result;
+      beforeEach(function() {
+        otherPerson = new Person(true, chance.string());
+        result = target.getMarriageProposalResponse(otherPerson, []);
+      });
 
-      describe("when there is no personal history", function () {
+      it("then the result is 0", function() {
+        result.should.equal(0);
+      });
+    });
 
-        it("then the result is 0");
+    describe("when there is personal history", function () {
+      var personalHistories, otherPerson;
+      
+      function createPersonalHistory(person, enjoymentLevel) {
+        return {
+          wasIncludedInHistory: function(me) {
+            return me === person;
+          },
+          getEnjoymentLevel: function() {
+            return enjoymentLevel;
+          }
+        };
+      }
+      
+      beforeEach(function() {
+        personalHistories = [];
+        otherPerson = new Person(true, chance.string());
+      });
+
+      describe("when the history results in a 100 response", function () {
+        var result;
+        
+        beforeEach(function() {
+          var x, events = chance.integer({ min: 5, max: 20 });
+          
+          for (x = 0; x < events; x++) {
+            personalHistories.push(createPersonalHistory(target, 100));
+          }
+          
+          result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+        });
+
+        it("then the result is 100", function() {
+          result.should.equal(100);
+        });
+        
+        describe("when an amazing event is added to the history", function() {
+          beforeEach(function() {
+            personalHistories.push(createPersonalHistory(target, 100 * 5));
+            result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+          });
+
+          it("then the result is 100", function() {
+            result.should.equal(100);
+          });
+          
+          describe("when a terrible event occurred without the person", function() {
+            beforeEach(function() {
+              personalHistories.push(createPersonalHistory(otherPerson, 100 * -5));
+              result = target.getMarriageProposalResponse(otherPerson, personalHistories);
+            });
+
+            it("then the result is 100", function() {
+              result.should.equal(100);
+            });
+          });
+        });
+      });
+
+      describe("when the history results in a 75 response", function () {
+
+        it("then the result is 75");
 
         it("then the history service provider was searched");
       });
 
-      describe("when there is personal history", function () {
+      describe("when the history results in a 35 response", function () {
 
-        describe("when the history results in a 100 response", function () {
+        it("then the result is 35");
 
-          it("then the result is 100");
+        it("then the history service provider was searched");
+      });
 
-          it("then the history service provider was searched");
-        });
+      describe("when the history results in a 0 response", function () {
 
-        describe("when the history results in a 75 response", function () {
+        describe("when all history is bad leading to a negative total", function () {
 
-          it("then the result is 75");
-
-          it("then the history service provider was searched");
-        });
-
-        describe("when the history results in a 35 response", function () {
-
-          it("then the result is 35");
+          it("then the result is 0");
 
           it("then the history service provider was searched");
         });
 
-        describe("when the history results in a 0 response", function () {
+        describe("when history results in a 0 response", function () {
 
-          describe("when all history is bad leading to a negative total", function () {
+          it("then the result is 0");
 
-            it("then the result is 0");
-
-            it("then the history service provider was searched");
-          });
-
-          describe("when history results in a 0 response", function () {
-
-            it("then the result is 0");
-
-            it("then the history service provider was searched");
-          });
+          it("then the history service provider was searched");
         });
       });
     });
