@@ -114,21 +114,61 @@ describe("Person", function() {
   });
   
   describe("when retrieving the gender of a person", function() {
-    
+    var Person;
+
+    beforeEach(function() {
+      Person = getModule();
+    });
+
     describe("when the gender is MALE", function() {
+      var result;
       
-      it("then the result is MALE");
+      beforeEach(function() {
+        var target = new Person(true, chance.string());
+        result = target.getGender();
+      });
+      
+      it("then the result is MALE", function() {
+        result.should.have.properties({
+          _isMale: true,
+          _displayName: "Male"
+        });
+      });
     });
     
     describe("when the gender is FEMALE", function() {
+      var result;
       
-      it("then the result is FEMALE");
+      beforeEach(function() {
+        var target = new Person(false, chance.string());
+        result = target.getGender();
+      });
+      
+      it("then the result is FEMALE", function() {
+        result.should.have.properties({
+          _isMale: false,
+          _displayName: "Female"
+        });
+      });
     });
   });
   
   describe("when retrieving the name of a person", function() {
+    var name, result;
     
-    it("then the name matches");
+    beforeEach(function() {
+      name = chance.string();
+      
+      var Person, target;
+      Person = getModule();
+      target = new Person(chance.bool(), name);
+      
+      result = target.getName();
+    });
+    
+    it("then the name matches", function() {
+      result.should.equal(name);
+    });
   });
   
   describe("when determining the marriage proposal response", function() {
