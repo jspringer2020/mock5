@@ -8,11 +8,12 @@
   "-W040": true,
   "-W024": true,
   "globals": {
-    "browser": true,
+    "require": true,
     "module": true,
-    "mocha": true,
     "describe": true,
     "it": true,
-    "beforeEach": true
+    "beforeEach": true,
+    "afterEach": true,
+    "__dirname": true
   }
 }

@@ -6,6 +6,7 @@ module.exports = function (grunt) {
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     jshint: {
+      options: grunt.file.readJSON('.jshintrc'),
       files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*Spec.js']
     },
     watch: {
