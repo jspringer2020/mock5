@@ -2,7 +2,7 @@ describe("MarriageProposal", function () {
   'use strict';
 
 
-  var baseDirectory = "./../../";
+  var baseDirectory = "./../../../src/libs/";
   var proxyquire = require("proxyquire");
   var sinon = require("sinon");
 
@@ -21,7 +21,7 @@ describe("MarriageProposal", function () {
 
 
   function getModule() {
-    var mod = proxyquire(baseDirectory + "src/MarriageProposal", mocks);
+    var mod = proxyquire(baseDirectory + "MarriageProposal", mocks);
     return mod;
   }
 

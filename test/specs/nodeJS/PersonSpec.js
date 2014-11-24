@@ -1,14 +1,14 @@
 describe("Person", function () {
   'use strict';
 
-  var baseDirectory = "./../../";
+  var baseDirectory = "./../../../src/libs/";
   var proxyquire = require("proxyquire");
   var chance = require("chance")();
 
   var mocks = {};
 
   function getModule() {
-    var mod = proxyquire(baseDirectory + "src/Person", mocks);
+    var mod = proxyquire(baseDirectory + "Person", mocks);
     return mod;
   }
 
