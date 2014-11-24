@@ -307,18 +307,15 @@ describe("MarriageProposal", function () {
         });
       });
 
-      describe("when the proposal is a long shot", function () {
+      describe("when the proposer is really compatible", function() {
+        var result;
         beforeEach(function() {
-          longShotCalculatorMock.generateRandomResult = sinon.stub();
+          proposer.calculatePersonalCompatibility.returns(75);
         });
         
-        describe("when the proposer is really compatible but not the proposed to", function() {
-          var result;
+        describe("when the proposed to is not compatible at all", function() {
           beforeEach(function() {
-            proposer.calculatePersonalCompatibility.returns(75);
-            proposedTo.calculatePersonalCompatibility.returns(41);
-            longShotCalculatorMock.generateRandomResult.returns(49);
-            
+            proposedTo.calculatePersonalCompatibility.returns(39);
             result = target.performMarriageProposal();
           });
           
@@ -340,20 +337,48 @@ describe("MarriageProposal", function () {
             proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
               .should.equal(true);
           });
-          
+        });
+        
+        describe("when the proposed to is slightly compatible", function() {
+          beforeEach(function() {
+            proposedTo.calculatePersonalCompatibility.returns(41);
+            longShotCalculatorMock.generateRandomResult = sinon.stub();
+            longShotCalculatorMock.generateRandomResult.returns(49);
+            
+            result = target.performMarriageProposal();
+          });
+
+          it("then the result is 'Single'", function() {
+            result.should.equal("Single");
+          });
+
+          it("then the history was retrieved", function() {
+            personalHistoryProviderMock.searchHistory.calledWithExactly(proposer, proposedTo)
+            .should.equal(true);
+          });
+
+          it("then the likelihood of marriage was determined for the proposer", function() {
+            proposer.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+          });
+
+          it("then the likelihood of marriage was determined for the proposed to", function() {
+            proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+          });
+
           it("then the long shot is calculated", function() {
             longShotCalculatorMock.generateRandomResult.calledWithExactly(75, 41)
-              .should.equal(true);
+            .should.equal(true);
           });
         });
         
-        describe("when the proposer is not compatible but not the proposed to", function() {
-          var result;
+        describe("when the proposed to is compatible", function() {
           beforeEach(function() {
-            proposer.calculatePersonalCompatibility.returns(74);
-            proposedTo.calculatePersonalCompatibility.returns(75);
+            proposedTo.calculatePersonalCompatibility.returns(74);
+            longShotCalculatorMock.generateRandomResult = sinon.stub();
             longShotCalculatorMock.generateRandomResult.returns(50);
-
+            
             result = target.performMarriageProposal();
           });
 
@@ -373,45 +398,114 @@ describe("MarriageProposal", function () {
 
           it("then the likelihood of marriage was determined for the proposed to", function() {
             proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
-              .should.equal(true);
+            .should.equal(true);
           });
 
           it("then the long shot is calculated", function() {
-            longShotCalculatorMock.generateRandomResult.calledWithExactly(74, 75)
+            longShotCalculatorMock.generateRandomResult.calledWithExactly(75, 74)
               .should.equal(true);
           });
         });
+      });
 
-        describe("when the long shot calculator says YES", function () {
-          var result;
+      describe("when the proposer is not compatible", function() {
+        var result;
+        beforeEach(function() {
+          proposer.calculatePersonalCompatibility.returns(41);
+        });
+        
+        describe("when the proposed to is not compatible at all", function() {
           beforeEach(function() {
-            proposer.calculatePersonalCompatibility.returns(41);
-            proposedTo.calculatePersonalCompatibility.returns(74);
-
+            proposedTo.calculatePersonalCompatibility.returns(39);
             result = target.performMarriageProposal();
           });
           
-          it("then the filing status is 'Married, filing separately'");
+          it("then the result is 'Single'", function() {
+            result.should.equal("Single");
+          });
+          
+          it("then the history was retrieved", function() {
+            personalHistoryProviderMock.searchHistory.calledWithExactly(proposer, proposedTo)
+              .should.equal(true);
+          });
 
-          it("then the history was retrieved");
+          it("then the likelihood of marriage was determined for the proposer", function() {
+            proposer.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+              .should.equal(true);
+          });
 
-          it("then the likelihood of marriage was determined for the proposer");
-
-          it("then the likelihood of marriage was determined for the proposed to");
-
-          it("then the long shot calculator was determined");
+          it("then the likelihood of marriage was determined for the proposed to", function() {
+            proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+              .should.equal(true);
+          });
         });
+        
+        describe("when the proposed to is slightly compatible", function() {
+          beforeEach(function() {
+            proposedTo.calculatePersonalCompatibility.returns(43);
+            longShotCalculatorMock.generateRandomResult = sinon.stub();
+            longShotCalculatorMock.generateRandomResult.returns(49);
+            
+            result = target.performMarriageProposal();
+          });
 
-        describe("when the long shot calculator says NO", function () {
-          it("then the filing status is 'Single'");
+          it("then the result is 'Single'", function() {
+            result.should.equal("Single");
+          });
 
-          it("then the history was retrieved");
+          it("then the history was retrieved", function() {
+            personalHistoryProviderMock.searchHistory.calledWithExactly(proposer, proposedTo)
+            .should.equal(true);
+          });
 
-          it("then the likelihood of marriage was determined for the proposer");
+          it("then the likelihood of marriage was determined for the proposer", function() {
+            proposer.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+          });
 
-          it("then the likelihood of marriage was determined for the proposed to");
+          it("then the likelihood of marriage was determined for the proposed to", function() {
+            proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+          });
 
-          it("then the long shot calculator was determined");
+          it("then the long shot is calculated", function() {
+            longShotCalculatorMock.generateRandomResult.calledWithExactly(41, 43)
+            .should.equal(true);
+          });
+        });
+        
+        describe("when the proposed to is compatible", function() {
+          beforeEach(function() {
+            proposedTo.calculatePersonalCompatibility.returns(74);
+            longShotCalculatorMock.generateRandomResult = sinon.stub();
+            longShotCalculatorMock.generateRandomResult.returns(50);
+            
+            result = target.performMarriageProposal();
+          });
+
+          it("then the result is 'Married, filing separately'", function() {
+            result.should.equal("Married, filing separately");
+          });
+
+          it("then the history was retrieved", function() {
+            personalHistoryProviderMock.searchHistory.calledWithExactly(proposer, proposedTo)
+              .should.equal(true);
+          });
+
+          it("then the likelihood of marriage was determined for the proposer", function() {
+            proposer.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+              .should.equal(true);
+          });
+
+          it("then the likelihood of marriage was determined for the proposed to", function() {
+            proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+          });
+
+          it("then the long shot is calculated", function() {
+            longShotCalculatorMock.generateRandomResult.calledWithExactly(41, 74)
+              .should.equal(true);
+          });
         });
       });
     });
