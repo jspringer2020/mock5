@@ -1,4 +1,5 @@
 describe("Person", function () {
+  'use strict';
 
   var baseDirectory = "./../../";
   var proxyquire = require("proxyquire");
