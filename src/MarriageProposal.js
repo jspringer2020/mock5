@@ -1,8 +1,8 @@
 'use strict';
 
 var Person = require("./Person");
-//var personalHistoryProvider = require("./PersonalHistoryProvider");
-//var longShotCalculationProvider = require("./LongShotCalculationProvider");
+var personalHistoryProvider = require("./PersonalHistoryProvider");
+var longShotCalculationProvider = require("./LongShotCalculationProvider");
 
 
 function MarriageProposal(proposingPerson, proposedToPerson) {
@@ -35,15 +35,15 @@ function MarriageProposal(proposingPerson, proposedToPerson) {
  */
 MarriageProposal.prototype.validate = function validate() {
   var key, ruleInfo, result = [];
-  
+
   for (key in marriageValidation) {
     ruleInfo = marriageValidation[key];
-    
+
     if(!ruleInfo.rule.call(this)) {
       result.push(key);
     }
   }
-  
+
   return result;
 };
 
@@ -57,7 +57,38 @@ MarriageProposal.prototype.validate = function validate() {
  * @returns {String} The new tax filing status
  */
 MarriageProposal.prototype.performMarriageProposal = function performMarriageProposal() {
-  return null;
+  var personalHistory,
+      proposingLikelihood,
+      proposedToLikelihood,
+      longShotLikelihood,
+      result = null,
+      validationResult = this.validate();
+  
+  if (!validationResult || validationResult.length) {
+    throw new Error("Marriage proposal is invalid.");
+  }
+  
+  personalHistory = personalHistoryProvider.searchHistory(this._proposingPerson, this._proposedToPerson);
+  proposingLikelihood = this._proposingPerson.calculatePersonalCompatibility(personalHistory);
+  proposedToLikelihood = this._proposedToPerson.calculatePersonalCompatibility(personalHistory);
+
+  if (proposingLikelihood <= 40 || proposedToLikelihood <= 40) {
+    result = "Single";
+  }
+  else if (proposingLikelihood >= 75 && proposedToLikelihood >= 75) {
+    result = "Married";
+  }
+  else {
+    longShotLikelihood = Math.round(longShotCalculationProvider.generateRandomResult(proposingLikelihood, proposedToLikelihood) / 100);
+    if (longShotLikelihood) {
+      result = "Married, filing separately";
+    }
+    else {
+      result = "Single";
+    }
+  }
+  
+  return result;
 };
 
 
