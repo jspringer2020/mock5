@@ -249,11 +249,11 @@ describe("MarriageProposal", function () {
         proposedTo.calculatePersonalCompatibility = sinon.stub();
       });
 
-      describe("when the proposal is rejected", function () {
+      describe("when the proposer is not compatible at all", function () {
         var result;
         beforeEach(function() {
-          proposer.calculatePersonalCompatibility.returns(40);
-          proposedTo.calculatePersonalCompatibility.returns(40);
+          proposer.calculatePersonalCompatibility.returns(39);
+          proposedTo.calculatePersonalCompatibility.returns(100);
           
           result = target.performMarriageProposal();
         });
@@ -278,11 +278,40 @@ describe("MarriageProposal", function () {
         });
       });
 
-      describe("when the proposal is accepted", function () {
+      describe("when the proposed To is not compatible at all", function () {
         var result;
         beforeEach(function() {
           proposer.calculatePersonalCompatibility.returns(100);
-          proposedTo.calculatePersonalCompatibility.returns(100);
+          proposedTo.calculatePersonalCompatibility.returns(39);
+          
+          result = target.performMarriageProposal();
+        });
+
+        it("then the filing status is 'Single'", function() {
+          result.should.equal("Single");
+        });
+
+        it("then the history was retrieved", function() {
+          personalHistoryProviderMock.searchHistory.calledWithExactly(proposer, proposedTo)
+            .should.equal(true);
+        });
+
+        it("then the likelihood of marriage was determined for the proposer", function() {
+          proposer.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+        });
+
+        it("then the likelihood of marriage was determined for the proposed to", function() {
+          proposedTo.calculatePersonalCompatibility.calledWithExactly(personalHistoryResult)
+            .should.equal(true);
+        });
+      });
+
+      describe("when the proposer & proposed to are very compatible", function () {
+        var result;
+        beforeEach(function() {
+          proposer.calculatePersonalCompatibility.returns(75);
+          proposedTo.calculatePersonalCompatibility.returns(75);
 
           result = target.performMarriageProposal();
         });
