@@ -102,13 +102,27 @@ module.exports = function (grunt) {
         return;
       }
 
-      printOutput(data[0]);
+      printOutput(data);
     });
 
     function printOutput(lcov) {
-      var functionsCovered, linesCovered;
-      functionsCovered = Math.round((lcov.functions.hit / lcov.functions.found) * 10000) / 100;
-      linesCovered = Math.round((lcov.lines.hit / lcov.lines.found) * 10000) / 100;
+      var functionsCoveredPercent = 0, 
+          linesCoveredPercent = 0, 
+          functionsCovered = 0, 
+          linesCovered = 0, 
+          functionsTotal = 0, 
+          linesTotal = 0;
+      
+      for (var x = 0; x < lcov.length; x++) {
+        var item = lcov[x];
+        functionsCovered += item.functions.hit;
+        functionsTotal += item.functions.found;
+        linesCovered += item.lines.hit;
+        linesTotal += item.lines.found;
+      }
+      
+      functionsCoveredPercent = Math.round((functionsCovered / functionsTotal) * 10000) / 100;
+      linesCoveredPercent = Math.round((linesCovered / linesTotal) * 10000) / 100;
 
       function getColor(percent) {
         var result = "green";
@@ -122,13 +136,15 @@ module.exports = function (grunt) {
       }
 
       grunt.log.writeln();
-      grunt.log.writeln("  " + (functionsCovered.toString()[getColor(functionsCovered)]).bold +
-                        "% coverage" [getColor(linesCovered)] +
-                        ": " + lcov.functions.hit + " of " + lcov.functions.found +
+      grunt.log.writeln("There were a total of " + lcov.length + " files inspected.");
+      grunt.log.writeln();
+      grunt.log.writeln("  " + (functionsCoveredPercent.toString()[getColor(functionsCoveredPercent)]).bold +
+                        "% coverage" [getColor(functionsCoveredPercent)] +
+                        ": " + functionsCovered + " of " + functionsTotal +
                         " functions covered.");
-      grunt.log.writeln("  " + (linesCovered.toString()[getColor(linesCovered)]).bold +
-                        "% coverage" [getColor(linesCovered)] +
-                        ": " + lcov.lines.hit + " of " + lcov.lines.found +
+      grunt.log.writeln("  " + (linesCoveredPercent.toString()[getColor(linesCoveredPercent)]).bold +
+                        "% coverage" [getColor(linesCoveredPercent)] +
+                        ": " + linesCovered + " of " + linesTotal +
                         " lines covered.");
       grunt.log.writeln();
       grunt.log.writeln();
