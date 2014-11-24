@@ -28,7 +28,7 @@ module.exports = function (grunt) {
         options: {
           root: './src',
           quiet: true,
-          reportFormats: ['lcovonly'],
+          reportFormats: ['lcov', 'lcovonly'],
           coverage: true,
           check: {
             lines: 50,
