@@ -1,15 +1,28 @@
-var Person = require("Person");
+'use strict';
+
+var Person = require("./Person");
+//var personalHistoryProvider = require("./PersonalHistoryProvider");
+//var longShotCalculationProvider = require("./LongShotCalculationProvider");
 
 
 function MarriageProposal(proposingPerson, proposedToPerson) {
-  if (!(proposedToPerson instanceof Person)) {
+
+  if (!proposingPerson) {
+    throw new Error("The argument 'proposingPerson' is required");
+  }
+
+  if (!(proposingPerson instanceof Person)) {
     throw new Error("The argument 'proposingPerson' does not conform to expected contract");
+  }
+
+  if (!proposedToPerson) {
+    throw new Error("The argument 'proposedToPerson' is required");
   }
 
   if (!(proposedToPerson instanceof Person)) {
     throw new Error("The argument 'proposedToPerson' does not conform to expected contract");
   }
-  
+
   this._proposingPerson = proposingPerson;
   this._proposedToPerson = proposedToPerson;
 }
@@ -21,7 +34,17 @@ function MarriageProposal(proposingPerson, proposedToPerson) {
  * @returns {(MarriageProposal.Validation|Array.)} A list of broken {MarriageProposal.ValidationCodes} that failed validation.
  */
 MarriageProposal.prototype.validate = function validate() {
-  return [];
+  var key, ruleInfo, result = [];
+  
+  for (key in marriageValidation) {
+    ruleInfo = marriageValidation[key];
+    
+    if(!ruleInfo.rule.call(this)) {
+      result.push(key);
+    }
+  }
+  
+  return result;
 };
 
 
@@ -33,7 +56,7 @@ MarriageProposal.prototype.validate = function validate() {
  * @param {Person} otherPerson The other person that is being proposed to.
  * @returns {String} The new tax filing status
  */
-Person.prototype.performMarriageProposal = function performMarriageProposal() {
+MarriageProposal.prototype.performMarriageProposal = function performMarriageProposal() {
   return null;
 };
 
