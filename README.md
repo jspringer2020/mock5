@@ -9,8 +9,15 @@ Helper library containing an example application that will show the power of usi
 * Prerequisites for installation are [nodeJS](http://nodejs.org/download/) and [Grunt](http://gruntjs.com/getting-started)
 * Clone this repository `git clone https://github.com/jspringer2020/mock5.git`
 * Install the dependencies `npm install`
-* Run the unit tests `grunt`
-* Watch the video on mocking
+* Run the unit tests
+  * NodeJS tests only `grunt testNode coverage;open coverage/lcov-report/index.html`
+  * AMD / RequireJS tests only `grunt connect testAMD
+  * AMD / RequireJS in the browser `grunt connect:testRunner;`
+  * Run all tests `grunt test`
+* Run the application
+  * NodeJS `node index.js`
+  * AMD `grunt connect:appRunner`
+  * Watch the video on mocking ***(Coming Soon)***
 
 
 ###**Lightining Talk Synopsis**###

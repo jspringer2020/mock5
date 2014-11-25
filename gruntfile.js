@@ -21,8 +21,50 @@ module.exports = function (grunt) {
     },
     mochacli: {
       options: {},
-      all: ['./test/specs/**/*Spec.js'],
-      nodeJS: ['./test/specs/nodeJS/**/*Spec.js']
+      all: ['./test/specs/nodeJS/**/*Spec.js']
+    },
+    connect: {
+      server: {
+        options: {
+          port: 12020,
+          base: '.',
+          hostname: 'localhost'
+        }
+      },
+      appRunner: {
+        keepalive: true,
+        options: {
+          port: 12021,
+          base: '.',
+          hostname: 'localhost',
+          keepalive: true,
+          open: {
+            target: "http://localhost:12021/index.html"
+          }
+        }
+      },
+      testRunner: {
+        options: {
+          port: 12022,
+          base: '.',
+          hostname: 'localhost',
+          keepalive: true,
+          open: {
+            target: "http://localhost:12022/test/SpecRunnerRequireJS.html"
+          }
+        }
+      }
+    },
+    mocha: {
+      test: {
+        options: {
+          log: true,
+          reporter: "Dot",
+          run: false,
+          timeout: 15000,
+          urls: ["http://localhost:12020/test/SpecRunnerRequireJS.html"]
+        }
+      }
     },
     mocha_istanbul: {
       nodeJS: {
@@ -172,11 +214,16 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-clear');
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
+  grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-mocha');
 
-  grunt.registerTask('test', ['mochacli:nodeJS']);
+  grunt.registerTask('testAMD', ['mocha']);
+  grunt.registerTask('testNode', ['mochacli']);
+  grunt.registerTask('test', ['testNode', 'testAMD']);
   grunt.registerTask('coverage', ['mocha_istanbul:nodeJS']);
   grunt.registerTask('lint', ['jshint']);
-  grunt.registerTask('build', ['lint', 'test', 'coverage']);
+  grunt.registerTask('watcher', ['connect:server', 'watch']);
+  grunt.registerTask('build', ['lint', 'connect:server', 'test', 'coverage']);
 
   grunt.registerTask('default', ['build']);
 };

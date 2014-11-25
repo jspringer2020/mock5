@@ -6,11 +6,13 @@ define([
 ], function ($, Person, MarriageProposal) {
   'use strict';
   
-  function errorHandler() {
-    console.log("Something bad happened", arguments);
-    alert("Uh ohhss...");
-    
+  function errorHandler(message) {
+    writeLog("<b><font color=red>UH OHS!!!<br />" + message + "</font></b>");
     return false;
+  }
+  
+  function writeLog(message, data) {
+    $('ul').append('<li><span>' + message + '</span></li>');
   }
   
   function handleSubmit() {
@@ -24,18 +26,20 @@ define([
       proposer = new Person(true, proposerInput.val().trim());
       proposedTo = new Person(false, proposedToInput.val().trim());
       
+      writeLog("Will you, " + proposedTo.getName() + " marry me (" + proposer.getName() + ")");
+      
       marriageProposal = new MarriageProposal(proposer, proposedTo);
       
       if (confirm("Are you sure you want to propose?")) {
-        console.log("Attempting proposal", { marriageProposal: marriageProposal });
+        writeLog(" -- Proposal starting");
 
         marriageProposal.performMarriageProposal();
         
-        console.log("This is a fail, there should have been an error....");
+        writeLog("You should not get here because the application should error");
       }
     }
     else {
-      alert("Missing something...try again...");
+      writeLog("Missing something...try again...");
     }
   }
   
@@ -43,8 +47,11 @@ define([
   var $proposerDIV = $('<div>')
     .append($('<span class="label">Proposer (Male)</span><span class="input"><input type="text" class="proposer" /></span>'))
     .append($('<span class="label">Proposed To (Female)</span><span class="input"><input type="text" class="proposedTo" /></span>'))
-    .append($('<button class="submit">Propose Marriage</button>').click(handleSubmit));
+    .append($('<button class="submit">Propose Marriage</button>').click(handleSubmit))
+    .append($('<ul>Activity Log</ul>'));
   
   $body.append($proposerDIV);
   window.onerror = errorHandler;
+  
+  writeLog("APPLICATION STARTING...");
 });
