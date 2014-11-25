@@ -7,10 +7,16 @@
 
   <script src="libs/sinon.js"></script>
 
-  <script src="../src/amd/libs/require.js" data-main="specRunner" defer></script>
-  <script src="../src/amd/libs/require.config.js" defer></script>
+  <script src="../src/amd/libs/require.js" data-main="specRunner"></script>
+  <script src="../src/amd/libs/require.config.js"></script>
 
-  <script src="libs/mocha.js" defer></script>
+  <script type="text/javascript">
+    requirejs.config({
+      baseUrl: "./../src/"
+    });
+  </script>
+
+  <script src="libs/mocha.js"></script>
 </head>
 
 <body>
