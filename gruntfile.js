@@ -21,11 +21,25 @@ module.exports = function (grunt) {
     },
     mochacli: {
       options: {},
-      all: ['./test/specs/**/*Spec.js']
+      all: ['./test/specs/**/*Spec.js'],
+      nodeJS: ['./test/specs/nodeJS/**/*Spec.js']
     },
     mocha_istanbul: {
-      coverage: {
-        src: 'test', // a folder works nicely
+      nodeJS: {
+        src: 'test/specs/nodeJS/', // a folder works nicely
+        options: {
+          root: './src',
+          quiet: true,
+          reportFormats: ['lcov', 'lcovonly'],
+          coverage: true,
+          check: {
+            lines: 50,
+            statements: 50
+          }
+        }
+      },
+      amdJS: {
+        src: 'test/specs/amd/', // a folder works nicely
         options: {
           root: './src',
           quiet: true,
@@ -159,8 +173,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
 
-  grunt.registerTask('test', ['mochacli']);
-  grunt.registerTask('coverage', ['mocha_istanbul:coverage']);
+  grunt.registerTask('test', ['mochacli:nodeJS']);
+  grunt.registerTask('coverage', ['mocha_istanbul:nodeJS']);
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('build', ['lint', 'test', 'coverage']);
 
