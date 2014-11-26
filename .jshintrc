@@ -1,0 +1,21 @@
+{
+  "undef": true,
+  "unused": true,
+  "curly": true,
+  "indent": 2,
+  "devel": true,
+  "node": true,
+  "-W040": true,
+  "-W024": true,
+  "globals": {
+    "require": true,
+    "define": true,
+    "module": true,
+    "sinon": true,
+    "describe": true,
+    "it": true,
+    "beforeEach": true,
+    "afterEach": true,
+    "__dirname": true
+  }
+}
