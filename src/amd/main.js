@@ -11,7 +11,7 @@ define([
     return false;
   }
   
-  function writeLog(message, data) {
+  function writeLog(message) {
     $('ul').append('<li><span>' + message + '</span></li>');
   }
   
