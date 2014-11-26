@@ -10,8 +10,8 @@ Helper library containing an example application that will show the power of usi
 * Clone this repository `git clone https://github.com/jspringer2020/mock5.git`
 * Install the dependencies `npm install`
 * Run the unit tests
-  * NodeJS tests only `grunt testNode coverage;open coverage/lcov-report/index.html`
-  * AMD / RequireJS tests only `grunt connect testAMD
+  * NodeJS tests only `grunt testNode coverage && open coverage/lcov-report/index.html`
+  * AMD / RequireJS tests only `grunt connect testAMD`
   * AMD / RequireJS in the browser `grunt connect:testRunner;`
   * Run all tests `grunt test`
 * Run the application
