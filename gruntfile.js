@@ -5,6 +5,9 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+    bumpup: {
+      file: 'package.json'
+    },
     jshint: {
       options: grunt.file.readJSON('.jshintrc'),
       files: ['Gruntfile.js', 'src/**/*.js', 'test/**/*Spec.js']
@@ -199,7 +202,8 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-karma');
-
+  grunt.loadNpmTasks('grunt-bumpup');
+  
   grunt.registerTask('testAMD', ['mocha']);
   grunt.registerTask('testNode', ['mochacli']);
   grunt.registerTask('test', ['testNode', 'testAMD']);
@@ -209,4 +213,5 @@ module.exports = function (grunt) {
   grunt.registerTask('build', ['lint', 'connect:server', 'test', 'coverage']);
 
   grunt.registerTask('default', ['build']);
+  grunt.registerTask('release', ['bumpup:patch', 'build']);
 };
