@@ -1,12 +1,13 @@
 /* globals requirejs */
 requirejs.config({
-  baseUrl: './src/',
+  baseUrl: '/src/',
   paths: {
     app: 'amd/main',
     "jquery": "amd/libs/jquery-2.1.1.min",
     "specRunner": "../test/SpecRunner",
     "Squire": "../test/libs/Squire",
     "should": "../test/libs/should.min",
+    "sinon": "../test/libs/sinon",
     "chance": "../test/libs/chance"
   },
   "shim": {
@@ -14,7 +15,8 @@ requirejs.config({
       deps: [
         "should",
         "Squire",
-        "chance"
+        "chance",
+        "sinon"
       ]
     }
   }
