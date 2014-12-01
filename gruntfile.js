@@ -74,35 +74,17 @@ module.exports = function (grunt) {
           quiet: true,
           reportFormats: ['lcov', 'lcovonly'],
           coverage: true,
+          coverageFolder: "coverage/nodeJS",
           check: {
             lines: 50,
             statements: 50
           }
         }
-      },
+      }
+    },
+    karma: {
       amdJS: {
-        src: 'test/specs/amd/', // a folder works nicely
-        options: {
-          root: './src',
-          quiet: true,
-          reportFormats: ['lcov', 'lcovonly'],
-          coverage: true,
-          check: {
-            lines: 50,
-            statements: 50
-          }
-        },
-        jenkins: {
-          src: 'test', // a folder works nicely
-          options: {
-            root: './src',
-            check: {
-              lines: 50,
-              statements: 50
-            },
-            reportFormats: ['lcovonly']
-          }
-        }
+        configFile: 'karma-requireJS.conf.js'
       }
     }
   });
@@ -216,11 +198,12 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-mocha');
+  grunt.loadNpmTasks('grunt-karma');
 
   grunt.registerTask('testAMD', ['mocha']);
   grunt.registerTask('testNode', ['mochacli']);
   grunt.registerTask('test', ['testNode', 'testAMD']);
-  grunt.registerTask('coverage', ['mocha_istanbul:nodeJS']);
+  grunt.registerTask('coverage', ['mocha_istanbul:nodeJS', 'karma:amdJS']);
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('watcher', ['connect:server', 'watch']);
   grunt.registerTask('build', ['lint', 'connect:server', 'test', 'coverage']);
