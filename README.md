@@ -10,14 +10,13 @@ Helper library containing an example application that will show the power of usi
 * Clone this repository `git clone https://github.com/jspringer2020/mock5.git`
 * Install the dependencies `npm install`
 * Run the unit tests
-  * NodeJS tests only `grunt testNode coverage && open coverage/lcov-report/index.html`
-  * AMD / RequireJS tests only `grunt connect testAMD`
-  * AMD / RequireJS in the browser `grunt connect:testRunner;`
-  * Run all tests `grunt test`
+  * There are several grunt steps you can execute for testing
+  * `npm test` will run all the tests and execute code coverage
 * Run the application
   * NodeJS `node index.js`
   * AMD `grunt connect:appRunner`
-  * Watch the video on mocking ***(Coming Soon)***
+  * `npm start` will execute both the node and RequireJS applications
+* Watch the video on mocking ***(Coming Soon)***
 
 
 ###**Lightining Talk Synopsis**###
