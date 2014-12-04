@@ -22,10 +22,6 @@ module.exports = function (grunt) {
       reporter: 'Dot',
       tasks: ['clear', 'lint', 'test', 'coverage']
     },
-    mochacli: {
-      options: {},
-      all: ['./test/specs/nodeJS/**/*Spec.js']
-    },
     connect: {
       server: {
         options: {
@@ -66,22 +62,6 @@ module.exports = function (grunt) {
           run: false,
           timeout: 15000,
           urls: ["http://localhost:12020/test/SpecRunnerRequireJS.html"]
-        }
-      }
-    },
-    mocha_istanbul: {
-      nodeJS: {
-        src: 'test/specs/nodeJS/', // a folder works nicely
-        options: {
-          root: './src',
-          quiet: true,
-          reportFormats: ['lcov', 'lcovonly'],
-          coverage: true,
-          coverageFolder: "coverage/nodeJS",
-          check: {
-            lines: 50,
-            statements: 50
-          }
         }
       }
     },
@@ -197,17 +177,14 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-clear');
-  grunt.loadNpmTasks('grunt-mocha-cli');
   grunt.loadNpmTasks('grunt-mocha-istanbul');
   grunt.loadNpmTasks('grunt-contrib-connect');
   grunt.loadNpmTasks('grunt-mocha');
   grunt.loadNpmTasks('grunt-karma');
   grunt.loadNpmTasks('grunt-bumpup');
   
-  grunt.registerTask('testAMD', ['mocha']);
-  grunt.registerTask('testNode', ['mochacli']);
-  grunt.registerTask('test', ['testNode', 'testAMD']);
-  grunt.registerTask('coverage', ['mocha_istanbul:nodeJS', 'karma:amdJS']);
+  grunt.registerTask('test', ['mocha']);
+  grunt.registerTask('coverage', ['karma:amdJS']);
   grunt.registerTask('lint', ['jshint']);
   grunt.registerTask('watcher', ['connect:server', 'watch']);
   grunt.registerTask('build', ['lint', 'connect:server', 'test', 'coverage']);

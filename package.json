@@ -1,5 +1,5 @@
 {
-  "name": "mock5",
+  "name": "mock5 Simple Marriage Proposal",
   "version": "0.1.4",
   "description": "Helper library containing an example application that will show the power of using Stubs, Spies and dependency mocking",
   "author": "Josh Springer",
@@ -24,7 +24,6 @@
     "mocha": "~2.0.1",
     "chance": "~0.6.1",
     "sinon": "~1.12.1",
-    "proxyquire": "~1.1.0",
     "should": "~4.3.0",
     "grunt-mocha-cli": "~1.11.0",
     "istanbul": "~0.3.2",
@@ -44,7 +43,7 @@
   },
   "engine": "node >= 0.10.24",
   "scripts": {
-    "start": "node index.js && grunt connect:appRunner",
+    "start": "grunt connect:appRunner",
     "test": "grunt build"
   }
 }
