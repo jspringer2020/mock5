@@ -3,14 +3,14 @@ define(["Squire", "jquery"], function (Squire, $) {
   'use strict';
 
   describe("MarriageProposal", function () {
-    var injector, PersonConstructorMock;
+    var injector, Person;
     
     beforeEach(function() {
       injector = new Squire();
 
-      PersonConstructorMock = function () {};
-      PersonConstructorMock.prototype.sillyGoose = function sillyGoose() {};
-      injector.mock("amd/Person", PersonConstructorMock);
+      Person = function () {};
+      Person.prototype.sillyGoose = function sillyGoose() {};
+      injector.mock("amd/Person", Person);
     });
 
 
@@ -71,7 +71,7 @@ define(["Squire", "jquery"], function (Squire, $) {
         describe("when the proposed to person is invalid", function () {
           var proposer;
           beforeEach(function () {
-            proposer = new PersonConstructorMock();
+            proposer = new Person();
           });
 
           describe("when person is missing", function () {
@@ -105,8 +105,8 @@ define(["Squire", "jquery"], function (Squire, $) {
       describe("when the object is constructed successful", function () {
         var construction, proposedTo, proposer;
         beforeEach(function () {
-          proposedTo = new PersonConstructorMock();
-          proposer = new PersonConstructorMock();
+          proposedTo = new Person();
+          proposer = new Person();
 
           construction = function () {
             return new MarriageProposal(proposer, proposedTo);
@@ -133,8 +133,8 @@ define(["Squire", "jquery"], function (Squire, $) {
     describe("when performing a marriage proposal", function () {
       var target, proposer, proposedTo;
       beforeEach(function () {
-        proposer = new PersonConstructorMock();
-        proposedTo = new PersonConstructorMock();
+        proposer = new Person();
+        proposedTo = new Person();
         
         proposer.calculatePersonalCompatibility = sinon.stub();
         proposedTo.calculatePersonalCompatibility = sinon.stub();
